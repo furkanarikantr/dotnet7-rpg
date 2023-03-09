@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace dotnet_rpg.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
@@ -16,14 +18,17 @@ namespace dotnet_rpg.Controllers
         {
             _characterService = characterService;
         }
-
+        
         //Tüm verileri liste şeklinde getirme.
         [HttpGet("GelAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllCharacters()
         {
+            //Kullanıcının id'sini alıyoruz.
+            //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
             return Ok(await _characterService.GetAllCharacters());
         }
-
+        
+        //[AllowAnonymous] //Authorize komutunu tek metot için yok etme.
         //Id'ye göre verileri getirme.
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetCharacterById(int id)

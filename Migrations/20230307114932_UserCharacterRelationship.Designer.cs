@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotnet_rpg.Data;
 
@@ -11,9 +12,11 @@ using dotnet_rpg.Data;
 namespace dotnet_rpg.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230307114932_UserCharacterRelationship")]
+    partial class UserCharacterRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,55 +87,11 @@ namespace dotnet_rpg.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("dotnet_rpg.Models.Weapon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Damage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CharacterId")
-                        .IsUnique();
-
-                    b.ToTable("Weapons");
-                });
-
             modelBuilder.Entity("dotnet_rpg.Models.Character", b =>
                 {
-                    b.HasOne("dotnet_rpg.Models.User", "User")
+                    b.HasOne("dotnet_rpg.Models.User", null)
                         .WithMany("Characters")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("dotnet_rpg.Models.Weapon", b =>
-                {
-                    b.HasOne("dotnet_rpg.Models.Character", "Character")
-                        .WithOne("Weapon")
-                        .HasForeignKey("dotnet_rpg.Models.Weapon", "CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Character");
-                });
-
-            modelBuilder.Entity("dotnet_rpg.Models.Character", b =>
-                {
-                    b.Navigation("Weapon");
                 });
 
             modelBuilder.Entity("dotnet_rpg.Models.User", b =>
